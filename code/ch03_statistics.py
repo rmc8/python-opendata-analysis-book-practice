@@ -7,6 +7,7 @@ app = marimo.App(width="medium")
 @app.cell
 def _():
     import marimo as mo
+
     return (mo,)
 
 
@@ -19,19 +20,22 @@ def _(mo):
 @app.cell
 def _():
     import pandas as pd
-    df = pd.DataFrame([
-        ["いちごストア株式会社", "A4491", "上場", "小売業", 50, 250],
-        ["メガハード株式会社", "A3547", "上場", "製造業", 50, 300],
-        ["百聞半導体株式会社", "A2704", "上場", "製造業", 20, 180],
-        ["五十音サーチ株式会社", "A8008", "上場", "小売業", 30, 200],
-        ["利根川通販株式会社", "A4342", "上場", "小売業", 100, 240],
-        ["超手本株式会社", "A3674", "上場", "サービス業", 20, 150],
-        ["源内自動車株式会社", "A7514", None, "製造業", 10, 100],
-        ["クローズサピエンス合同会社", "A0941", None, "サービス業", None, 120],
-        ["富価自動車株式会社", "J7203", "上場", "製造業", 60, 120],
-        ["ハード通信株式会社", "J9984", "上場", "サービス業", 15, 50],
-        ["株式会社財前", "J3994", None, "サービス業", None, 30]
-        ], columns=["会社名", "会社コード", "上場区分", "業種", "従業員数", "資本金"]
+
+    df = pd.DataFrame(
+        [
+            ["いちごストア株式会社", "A4491", "上場", "小売業", 50, 250],
+            ["メガハード株式会社", "A3547", "上場", "製造業", 50, 300],
+            ["百聞半導体株式会社", "A2704", "上場", "製造業", 20, 180],
+            ["五十音サーチ株式会社", "A8008", "上場", "小売業", 30, 200],
+            ["利根川通販株式会社", "A4342", "上場", "小売業", 100, 240],
+            ["超手本株式会社", "A3674", "上場", "サービス業", 20, 150],
+            ["源内自動車株式会社", "A7514", None, "製造業", 10, 100],
+            ["クローズサピエンス合同会社", "A0941", None, "サービス業", None, 120],
+            ["富価自動車株式会社", "J7203", "上場", "製造業", 60, 120],
+            ["ハード通信株式会社", "J9984", "上場", "サービス業", 15, 50],
+            ["株式会社財前", "J3994", None, "サービス業", None, 30],
+        ],
+        columns=["会社名", "会社コード", "上場区分", "業種", "従業員数", "資本金"],
     )
 
     df
@@ -176,7 +180,7 @@ def _(df, pd):
 
 @app.cell
 def _(adf, df):
-    adf.assign(**{"小売業フラグ": (df["業種"]=="小売業").astype(int)}).iloc[:5, [-1]]
+    adf.assign(**{"小売業フラグ": (df["業種"] == "小売業").astype(int)}).iloc[:5, [-1]]
     return
 
 
@@ -189,19 +193,25 @@ def _(mo):
 @app.cell
 def _(adf):
     cols = ["資本金区分", "上場区分"]
-    adf[cols].groupby(cols, dropna=False, observed=False).size().reset_index(name="度数")
+    adf[cols].groupby(cols, dropna=False, observed=False).size().reset_index(
+        name="度数"
+    )
     return (cols,)
 
 
 @app.cell
 def _(adf, cols):
-    adf[cols + ["従業員数"]].groupby(cols, dropna=False, observed=False).mean().reset_index()
+    adf[cols + ["従業員数"]].groupby(
+        cols, dropna=False, observed=False
+    ).mean().reset_index()
     return
 
 
 @app.cell
 def _(adf, cols):
-    adf[cols + ["従業員数"]].groupby(cols, dropna=False, observed=False).count().reset_index()
+    adf[cols + ["従業員数"]].groupby(
+        cols, dropna=False, observed=False
+    ).count().reset_index()
     return
 
 
@@ -238,7 +248,9 @@ def _(mo):
 
 @app.cell
 def _(df):
-    df_eng = df[["資本金", "従業員数"]].rename(columns={"資本金": "capital", "従業員数": "num of employees"})
+    df_eng = df[["資本金", "従業員数"]].rename(
+        columns={"資本金": "capital", "従業員数": "num of employees"}
+    )
     df_eng.plot.scatter(x="capital", y="num of employees")
     return (df_eng,)
 
@@ -248,10 +260,9 @@ def _(adf, df, pd):
     import seaborn as sns
 
     hdf = adf.assign(**{"従業員区分": pd.cut(df["従業員数"], bins=3, right=False)})
-    heat_df = (
-        hdf[["資本金区分", "従業員区分"]]
-              .rename(columns={"資本金区分": "capital", "従業員区分": "num of employees"})
-             )
+    heat_df = hdf[["資本金区分", "従業員区分"]].rename(
+        columns={"資本金区分": "capital", "従業員区分": "num of employees"}
+    )
     heat_crosstab = heat_df.pivot_table(
         index="capital",
         columns="num of employees",
