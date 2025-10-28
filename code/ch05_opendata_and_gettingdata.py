@@ -52,6 +52,7 @@ def _(mo):
 @app.cell
 def _():
     from pathlib import Path
+
     import pandas as pd
 
     current_dir = Path(__file__).parent
@@ -191,7 +192,7 @@ def _(mo):
 
 @app.cell
 def _():
-    from SPARQLWrapper import SPARQLWrapper, JSON
+    from SPARQLWrapper import JSON, SPARQLWrapper
 
     SPARQL_ENDPOINT = "http://data.e-stat.go.jp/lod/sparql/alldata/query"
     sparql = SPARQLWrapper(SPARQL_ENDPOINT)

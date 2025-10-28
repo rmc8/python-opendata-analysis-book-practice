@@ -178,8 +178,9 @@ def _(mo):
 @app.cell
 def _():
     from urllib.parse import urljoin
-    import requests
+
     import pandas as pd
+    import requests
 
     return pd, requests, urljoin
 
@@ -478,13 +479,8 @@ def _(converted_df):
 
 @app.cell
 def _():
-    from estat import (
-        get_metainfo,
-        get_statsdata,
-        cleansing_statsdata,
-        colname_to_japanese,
-        create_hierarchy_dataframe,
-    )
+    from estat import (cleansing_statsdata, colname_to_japanese,
+                       create_hierarchy_dataframe, get_metainfo, get_statsdata)
     from utils import time_magic
 
     return (
